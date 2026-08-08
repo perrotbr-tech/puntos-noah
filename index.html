@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Los puntos de Noah</title>
+<meta name="theme-color" content="#12643A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Puntos de Noah">
+<meta name="description" content="Tabla de puntos de conducta: obediencia, respeto y buenas acciones.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%2312643A'/><text y='.9em' x='50' text-anchor='middle' font-size='62'>&#9917;</text></svg>">
+<style>
+  :root{
+    --campo:#12643A;
+    --campo-claro:#E4F0E8;
+    --amarillo:#F2B705;
+    --rojo:#C0342B;
+    --rojo-claro:#FBE9E7;
+    --tinta:#141414;
+    --gris:#6B7570;
+    --linea:#DDE3DF;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0;background:#EFEFEA;color:var(--tinta);
+    font-family:"Segoe UI",Roboto,-apple-system,Helvetica,Arial,sans-serif;
+    font-size:15px;padding-bottom:40px;
+  }
+  .wrap{max-width:620px;margin:0 auto;}
+  button:focus-visible{outline:3px solid var(--amarillo);outline-offset:2px;}
+
+  /* marcador */
+  .marcador{background:var(--campo);color:#fff;padding:18px 18px 16px;position:sticky;top:0;z-index:10;box-shadow:0 2px 10px rgba(0,0,0,.18);}
+  .marcador .eyebrow{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;opacity:.75;}
+  .total{font-family:"Arial Black",Impact,sans-serif;font-size:46px;line-height:1;margin:2px 0 0;}
+  .total span{font-size:16px;opacity:.7;font-family:inherit;}
+  .barra{height:12px;background:rgba(255,255,255,.22);border-radius:6px;margin-top:12px;overflow:hidden;}
+  .barra i{display:block;height:100%;background:var(--amarillo);width:0;transition:width .4s ease;}
+  .proximo{font-size:12px;margin:9px 0 0;opacity:.92;text-align:center;}
+  .proximo b{color:var(--amarillo);}
+  .hitos{display:flex;gap:6px;margin-top:9px;}
+  .hito{flex:1;text-align:center;padding:6px 2px;border-radius:6px;background:rgba(255,255,255,.14);line-height:1.15;}
+  .hito b{display:block;font-size:12px;font-family:"Arial Black",Impact,sans-serif;}
+  .hito small{display:block;font-size:9px;opacity:.8;margin-top:2px;}
+  .hito.on{background:var(--amarillo);color:var(--tinta);}
+  .hito.on small{opacity:1;font-weight:700;}
+
+  /* aviso de guardado */
+  .banner{background:#5B4A00;color:#FFE9A8;font-size:12px;padding:8px 14px;text-align:center;line-height:1.4;}
+
+  /* barra de dia */
+  .diabar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border-bottom:1px solid var(--linea);padding:10px 14px;}
+  .diabar button{border:1px solid var(--linea);background:#fff;border-radius:9px;width:42px;height:38px;font-size:20px;color:var(--campo);cursor:pointer;}
+  .diabar button:disabled{opacity:.3;}
+  .diabar .fecha{text-align:center;line-height:1.2;}
+  .diabar .fecha b{display:block;font-size:15px;text-transform:capitalize;}
+  .diabar .fecha small{color:var(--gris);font-size:11px;}
+
+  /* semana */
+  .semana{margin:14px 12px;background:#fff;border:1px solid var(--linea);border-radius:12px;padding:12px 12px 10px;}
+  .semana h3{margin:0 0 9px;font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--gris);display:flex;justify-content:space-between;}
+  .semana h3 b{color:var(--campo);font-size:13px;}
+  .sem-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+  .sem-dia{text-align:center;border:1px solid var(--linea);border-radius:7px;padding:6px 2px;cursor:pointer;background:#fff;font:inherit;}
+  .sem-dia small{display:block;font-size:9px;color:var(--gris);text-transform:uppercase;}
+  .sem-dia b{display:block;font-family:"Arial Black",Impact,sans-serif;font-size:14px;margin-top:2px;}
+  .sem-dia.pos b{color:var(--campo);}
+  .sem-dia.neg b{color:var(--rojo);}
+  .sem-dia.cero b{color:var(--linea);}
+  .sem-dia.hoy{border-color:var(--campo);border-width:2px;}
+  .sem-dia.sel{background:var(--campo-claro);border-color:var(--campo);}
+
+  /* grupos */
+  .grupo{margin:14px 12px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--linea);}
+  .grupo h2{margin:0;padding:11px 14px;font-size:12px;text-transform:uppercase;letter-spacing:1.2px;font-family:"Arial Black",Impact,sans-serif;color:#fff;background:var(--campo);}
+  .grupo.neg h2{background:var(--rojo);}
+  .grupo h2 em{float:right;font-style:normal;font-size:10px;opacity:.85;}
+  .regla{display:flex;align-items:center;gap:11px;padding:10px 12px;border-top:1px solid var(--linea);}
+  .grupo .regla:first-of-type{border-top:none;}
+  .regla .ico{font-size:24px;width:30px;text-align:center;}
+  .regla .txt{flex:1;line-height:1.25;}
+  .regla .txt small{display:block;color:var(--gris);font-size:11px;margin-top:1px;}
+  .regla .val{font-family:"Arial Black",Impact,sans-serif;font-size:13px;color:var(--campo);background:var(--campo-claro);border-radius:6px;padding:3px 7px;}
+  .neg .regla .val{color:var(--rojo);background:var(--rojo-claro);}
+  .stepper{display:flex;align-items:center;gap:4px;}
+  .stepper button{width:38px;height:38px;border-radius:10px;border:none;font-size:21px;cursor:pointer;background:var(--campo);color:#fff;font-weight:700;line-height:1;}
+  .neg .stepper button{background:var(--rojo);}
+  .stepper button.menos{background:#EDF1EE;color:var(--gris);}
+  .stepper button:disabled{opacity:.3;cursor:default;}
+  .stepper .n{min-width:26px;text-align:center;font-family:"Arial Black",Impact,sans-serif;font-size:17px;}
+  .regla.activa{background:#F6FBF8;}
+  .neg .regla.activa{background:#FEF6F5;}
+
+  /* resumen */
+  .resumen{margin:14px 12px;background:#fff;border:1px solid var(--linea);border-radius:12px;display:flex;text-align:center;overflow:hidden;}
+  .resumen div{flex:1;padding:12px 6px;border-left:1px solid var(--linea);}
+  .resumen div:first-child{border-left:none;}
+  .resumen b{display:block;font-family:"Arial Black",Impact,sans-serif;font-size:22px;}
+  .resumen small{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--gris);}
+  .resumen .g b{color:var(--campo);}
+  .resumen .p b{color:var(--rojo);}
+  .aviso{margin:0 12px;font-size:12px;color:var(--gris);text-align:center;line-height:1.5;}
+  .tope{color:var(--rojo);font-weight:600;}
+
+  /* reset */
+  .zona-reset{text-align:center;margin-top:18px;}
+  .reset{background:none;border:none;color:var(--gris);font-size:12px;text-decoration:underline;cursor:pointer;font-family:inherit;}
+  .confirmar{display:inline-flex;gap:8px;align-items:center;font-size:12px;color:var(--gris);}
+  .confirmar button{border:1px solid var(--linea);background:#fff;border-radius:7px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;}
+  .confirmar button.si{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+  .estado{padding:40px;text-align:center;color:var(--gris);}
+
+  @media (prefers-reduced-motion: reduce){ .barra i{transition:none;} }
+</style>
+</head>
+<body>
+<div class="wrap"><div id="app"><div class="estado">Cargando…</div></div></div>
+
+<script>
+const NOMBRE = 'Noah';
+const REGLAS = [
+  {g:'Todos los días', tope:'máx. 16 al día', neg:false, items:[
+    {id:'obed', ico:'⚡', t:'Obedezco a la primera', p:3, max:1},
+    {id:'brus', ico:'🤝', t:'Juego sin brusquedad', p:3, max:1},
+    {id:'verd', ico:'💬', t:'Digo la verdad', p:2, max:1},
+    {id:'turn', ico:'✋', t:'Espero mi turno', p:2, max:1},
+    {id:'cama', ico:'🛏️', t:'Hago mi cama', p:2, max:1},
+    {id:'orden',ico:'🧹', t:'Ordeno y ayudo en la casa', p:2, max:1},
+    {id:'dorm', ico:'🌙', t:'Me acuesto a la hora', p:2, max:1}
+  ]},
+  {g:'Colegio', tope:'se anota el viernes', neg:false, items:[
+    {id:'clase', ico:'🏫', t:'Buen comportamiento en clases', p:10, max:1},
+    {id:'recreo',ico:'⚽', t:'Recreo sin peleas', s:'fútbol y taca-taca', p:10, max:1},
+    {id:'nota',  ico:'🎯', t:'Buena nota o buen reporte', p:5, max:5}
+  ]},
+  {g:'Puntos extra', tope:'cada vez que pasa', neg:false, items:[
+    {id:'ayuda', ico:'⭐', t:'Ayudo sin que me lo pidan', p:3, max:5},
+    {id:'perdon',ico:'🙏', t:'Pido perdón y reparo', p:3, max:3}
+  ]},
+  {g:'Pierdo puntos', tope:'máx. −10 al día', neg:true, items:[
+    {id:'desob',ico:'🚫', t:'Desobedezco al segundo aviso', p:-3, max:5},
+    {id:'ment', ico:'🤥', t:'Digo una mentira', p:-5, max:5},
+    {id:'empu', ico:'💥', t:'Juego brusco: empujo o tironeo', p:-3, max:5},
+    {id:'pego', ico:'👊', t:'Pego, pateo o muerdo', p:-5, max:5},
+    {id:'pelea',ico:'😤', t:'Peleo en el recreo o en el taca-taca', p:-5, max:5},
+    {id:'grito',ico:'😠', t:'Me enojo y grito cuando pierdo', p:-3, max:5},
+    {id:'inter',ico:'🗣️', t:'Interrumpo o no espero mi turno', p:-2, max:5}
+  ]}
+];
+const TOPE_NEG = -10, META = 1000, CLAVE = 'tabla-puntos:datos';
+const HITOS = [
+  {p:250,  t:'Guantes de arquero'},
+  {p:500,  t:'Cine'},
+  {p:750,  t:'Parque de juegos'},
+  {p:1000, t:'PlayStation 🎂'}
+];
+const DIAS  = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const DIAS3 = ['dom','lun','mar','mié','jue','vie','sáb'];
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+let datos = {dias:{}};
+let fecha = mediodia(new Date());
+let sinGuardado = false;
+let confirmando = false;
+
+/* --- fechas: se trabaja siempre al mediodía para que el cambio de hora no salte días --- */
+function mediodia(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12, 0, 0, 0); }
+function iso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function hoy(){ return iso(new Date()); }
+function sumarDias(d, n){ const x = mediodia(d); x.setDate(x.getDate()+n); return x; }
+function lunesDe(d){ const x = mediodia(d); const off = (x.getDay()+6)%7; x.setDate(x.getDate()-off); return x; }
+
+/* --- cálculo --- */
+function puntosDia(dia){
+  let g=0,p=0;
+  REGLAS.forEach(gr=>gr.items.forEach(r=>{
+    const n = dia[r.id]||0;
+    if(!n) return;
+    if(r.p>0) g += r.p*n; else p += r.p*n;
+  }));
+  return {g, p, pAplicado: Math.max(p, TOPE_NEG), tope: p < TOPE_NEG, neto: g + Math.max(p, TOPE_NEG)};
+}
+function netoDe(k){ return puntosDia(datos.dias[k]||{}).neto; }
+function acumulado(){
+  let t=0;
+  Object.keys(datos.dias).forEach(k=>{ t += netoDe(k); });
+  return Math.max(0,t);
+}
+function totalSemana(d){
+  const l = lunesDe(d); let t=0;
+  for(let i=0;i<7;i++) t += netoDe(iso(sumarDias(l,i)));
+  return t;
+}
+
+/* --- guardado: en cola, para que dos toques seguidos no se pisen --- */
+let cola = Promise.resolve();
+const ALM = (function(){
+  if(typeof window !== 'undefined' && window.storage && typeof window.storage.set === 'function'){
+    return {tipo:'visor',
+      set:(k,v)=>window.storage.set(k,v),
+      get:async k=>{ const r = await window.storage.get(k); return r && r.value; }};
+  }
+  try{
+    const t='__prueba__';
+    window.localStorage.setItem(t,'1'); window.localStorage.removeItem(t);
+    return {tipo:'navegador',
+      set:async(k,v)=>window.localStorage.setItem(k,v),
+      get:async k=>window.localStorage.getItem(k)};
+  }catch(e){}
+  return {tipo:'memoria', set:async()=>{}, get:async()=>null};
+})();
+if(ALM.tipo === 'memoria') sinGuardado = true;
+
+function guardar(){
+  if(ALM.tipo === 'memoria'){ sinGuardado = true; return; }
+  cola = cola.then(()=>ALM.set(CLAVE, JSON.stringify(datos)))
+             .catch(e=>{ sinGuardado = true; console.error('No se pudo guardar', e); });
+}
+async function cargar(){
+  try{
+    const v = await ALM.get(CLAVE);
+    if(v){
+      const d = JSON.parse(v);
+      if(d && typeof d === 'object' && d.dias) datos = d;
+    }
+  }catch(e){ /* primera vez o dato ilegible: se parte de cero */ }
+}
+
+/* --- acciones --- */
+function cambiar(id, delta){
+  const regla = REGLAS.flatMap(g=>g.items).find(r=>r.id===id);
+  if(!regla) return;
+  const k = iso(fecha);
+  if(k > hoy()) return;
+  if(!datos.dias[k]) datos.dias[k] = {};
+  const n = Math.min(regla.max, Math.max(0, (datos.dias[k][id]||0) + delta));
+  if(n===0) delete datos.dias[k][id]; else datos.dias[k][id] = n;
+  if(Object.keys(datos.dias[k]).length===0) delete datos.dias[k];
+  guardar(); render();
+}
+function irA(d){ fecha = mediodia(d); confirmando = false; render(); }
+function reiniciar(){ datos = {dias:{}}; confirmando = false; guardar(); render(); }
+
+/* --- render --- */
+function render(){
+  const k = iso(fecha), hk = hoy();
+  const dia = datos.dias[k] || {};
+  const res = puntosDia(dia);
+  const total = acumulado();
+  const pct = Math.min(100, total/META*100);
+  const proximo = HITOS.find(h => total < h.p);
+  const bloqueado = k > hk;
+  const lun = lunesDe(fecha);
+
+  let html = `
+  <div class="marcador">
+    <div class="eyebrow">Los puntos de ${NOMBRE}</div>
+    <div class="total">${total} <span>/ ${META}</span></div>
+    <div class="barra"><i style="width:${pct}%"></i></div>
+    <p class="proximo">${proximo
+      ? `Faltan <b>${proximo.p - total}</b> puntos para ${proximo.t}`
+      : '¡Los 1000 puntos están completos!'}</p>
+    <div class="hitos">${HITOS.map(h=>
+      `<div class="hito ${total>=h.p?'on':''}"><b>${h.p}</b><small>${h.t}</small></div>`).join('')}
+    </div>
+  </div>`;
+
+  if(sinGuardado) html += `<div class="banner">Este dispositivo no está guardando el avance. Anota el total antes de cerrar.</div>`;
+
+  html += `
+  <div class="diabar">
+    <button data-ir="-1" aria-label="Día anterior">‹</button>
+    <div class="fecha">
+      <b>${k===hk?'Hoy':DIAS[fecha.getDay()]}</b>
+      <small>${fecha.getDate()} de ${MESES[fecha.getMonth()]}</small>
+    </div>
+    <button data-ir="1" aria-label="Día siguiente" ${k>=hk?'disabled':''}>›</button>
+  </div>
+
+  <div class="semana">
+    <h3><span>Semana en curso</span><b>${totalSemana(fecha)} pts</b></h3>
+    <div class="sem-grid">`;
+  for(let i=0;i<7;i++){
+    const d = sumarDias(lun,i), dk = iso(d), n = netoDe(dk), fut = dk > hk;
+    html += `<button class="sem-dia ${n>0?'pos':n<0?'neg':'cero'} ${dk===hk?'hoy':''} ${dk===k?'sel':''}"
+      data-fecha="${dk}" ${fut?'disabled':''}>
+      <small>${DIAS3[d.getDay()]}</small><b>${fut?'·':(n>0?'+':'')+n}</b></button>`;
+  }
+  html += `</div></div>`;
+
+  REGLAS.forEach(gr=>{
+    html += `<div class="grupo ${gr.neg?'neg':''}"><h2>${gr.g}<em>${gr.tope}</em></h2>`;
+    gr.items.forEach(r=>{
+      const n = dia[r.id]||0;
+      html += `
+      <div class="regla ${n?'activa':''}">
+        <div class="ico">${r.ico}</div>
+        <div class="txt">${r.t}${r.s?`<small>${r.s}</small>`:''}</div>
+        <div class="val">${r.p>0?'+':'−'}${Math.abs(r.p)}</div>
+        <div class="stepper">
+          <button class="menos" data-id="${r.id}" data-d="-1" ${n?'':'disabled'} aria-label="Quitar ${r.t}">−</button>
+          <span class="n">${n}</span>
+          <button data-id="${r.id}" data-d="1" ${(n>=r.max||bloqueado)?'disabled':''} aria-label="Sumar ${r.t}">+</button>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+
+  html += `
+  <div class="resumen">
+    <div class="g"><b>+${res.g}</b><small>Ganados</small></div>
+    <div class="p"><b>${res.pAplicado}</b><small>Perdidos</small></div>
+    <div><b>${res.neto>0?'+':''}${res.neto}</b><small>Del día</small></div>
+  </div>
+  <p class="aviso">${res.tope
+      ? '<span class="tope">Se aplicó el tope: en un día no se pierden más de 10 puntos.</span>'
+      : 'Los puntos se anotan cada noche, entre los dos. Los premios ganados no se devuelven.'}</p>
+  <div class="zona-reset">${confirmando
+      ? `<span class="confirmar">¿Borrar todo el avance?
+           <button class="si" data-si>Sí, borrar</button>
+           <button data-no>Cancelar</button></span>`
+      : `<button class="reset" data-pedir>Reiniciar todo</button>`}</div>`;
+
+  const app = document.getElementById('app');
+  app.innerHTML = html;
+  app.querySelectorAll('[data-id]').forEach(b=>b.addEventListener('click',()=>cambiar(b.dataset.id, +b.dataset.d)));
+  app.querySelectorAll('[data-ir]').forEach(b=>b.addEventListener('click',()=>irA(sumarDias(fecha, +b.dataset.ir))));
+  app.querySelectorAll('[data-fecha]').forEach(b=>b.addEventListener('click',()=>{
+    const [y,m,d] = b.dataset.fecha.split('-').map(Number);
+    irA(new Date(y, m-1, d, 12));
+  }));
+  const pedir = app.querySelector('[data-pedir]');
+  if(pedir) pedir.addEventListener('click',()=>{ confirmando = true; render(); });
+  const si = app.querySelector('[data-si]');
+  if(si) si.addEventListener('click', reiniciar);
+  const no = app.querySelector('[data-no]');
+  if(no) no.addEventListener('click',()=>{ confirmando = false; render(); });
+}
+
+/* si la app queda abierta y cambia el día, se refresca sola */
+let ultimoDia = hoy();
+setInterval(()=>{ if(hoy()!==ultimoDia){ ultimoDia = hoy(); fecha = mediodia(new Date()); render(); } }, 60000);
+
+(async ()=>{ await cargar(); render(); })();
+</script>
+</body>
+</html>

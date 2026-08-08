@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi tabla de puntos</title>
+<style>
+  @page { size: A4; margin: 10mm; }
+
+  :root{
+    --campo:#12643A;
+    --campo-claro:#E4F0E8;
+    --amarillo:#F2B705;
+    --rojo:#C0342B;
+    --rojo-claro:#FBE9E7;
+    --tinta:#141414;
+    --linea:#C9CFCB;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    padding:14px;
+    background:#EFEFEA;
+    color:var(--tinta);
+    font-family:"Segoe UI",Roboto,-apple-system,Helvetica,Arial,sans-serif;
+    font-size:13px;
+    line-height:1.35;
+  }
+
+  .hoja{
+    max-width:800px;
+    margin:0 auto;
+    background:#fff;
+    padding:20px 22px 26px;
+    border:2px solid var(--tinta);
+  }
+
+  /* ---------- encabezado ---------- */
+  header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:16px;
+    border-bottom:5px solid var(--campo);
+    padding-bottom:10px;
+    margin-bottom:16px;
+  }
+  h1{
+    font-family:"Arial Black","Haettenschweiler",Impact,sans-serif;
+    font-size:30px;
+    line-height:.95;
+    letter-spacing:-.5px;
+    margin:0;
+    text-transform:uppercase;
+  }
+  h1 small{
+    display:block;
+    font-family:inherit;
+    font-size:12px;
+    letter-spacing:2.5px;
+    color:var(--campo);
+    margin-bottom:4px;
+  }
+  .campos{font-size:12px;text-align:right;white-space:nowrap;}
+  .campos div{margin-bottom:7px;}
+  .campos u{display:inline-block;min-width:110px;border-bottom:1.5px solid var(--tinta);text-decoration:none;}
+
+  /* ---------- bloques ---------- */
+  section{margin-bottom:16px;break-inside:avoid;}
+  h2{
+    font-family:"Arial Black",Impact,sans-serif;
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin:0 0 7px;
+    padding:5px 9px;
+    color:#fff;
+    background:var(--campo);
+  }
+  h2.rojo{background:var(--rojo);}
+  h2 span{float:right;font-size:11px;letter-spacing:.5px;opacity:.9;}
+
+  table{width:100%;border-collapse:collapse;}
+  th,td{border:1px solid var(--linea);padding:5px 6px;}
+  thead th{
+    background:var(--campo-claro);
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.8px;
+    width:34px;
+    text-align:center;
+  }
+  thead th:first-child{text-align:left;width:auto;}
+  thead th.pts{width:44px;}
+  .rojo-tabla thead th{background:var(--rojo-claro);}
+
+  td.regla{font-weight:600;}
+  td.regla i{font-style:normal;margin-right:7px;font-size:16px;vertical-align:-2px;}
+  td.valor{
+    text-align:center;
+    font-family:"Arial Black",Impact,sans-serif;
+    font-size:14px;
+    color:var(--campo);
+    background:var(--campo-claro);
+  }
+  .rojo-tabla td.valor{color:var(--rojo);background:var(--rojo-claro);}
+  td.dia{text-align:center;height:26px;}
+
+  /* ---------- recorrido ---------- */
+  .cancha{
+    border:3px solid var(--campo);
+    padding:12px;
+  }
+  .pista{
+    display:grid;
+    grid-template-columns:repeat(20,1fr);
+    gap:3px;
+  }
+  .casilla{
+    aspect-ratio:1/1;
+    border:1px solid var(--linea);
+    font-size:7px;
+    color:#9AA39D;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding-top:1px;
+  }
+  .casilla.meta{
+    border:2px solid var(--amarillo);
+    background:#FFF8E1;
+    color:var(--tinta);
+    font-weight:700;
+  }
+  .premios{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-top:11px;
+  }
+  .premio{
+    border:1px solid var(--linea);
+    border-top:4px solid var(--amarillo);
+    padding:7px 8px;
+  }
+  .premio b{
+    display:block;
+    font-family:"Arial Black",Impact,sans-serif;
+    font-size:17px;
+    color:var(--campo);
+  }
+  .premio span{font-size:10px;color:#5B6660;text-transform:uppercase;letter-spacing:.5px;}
+  .premio u{display:block;margin-top:6px;border-bottom:1.3px solid var(--tinta);height:15px;text-decoration:none;}
+
+  /* ---------- reglas de oro ---------- */
+  .oro{
+    border:2px dashed var(--tinta);
+    padding:11px 14px;
+  }
+  .oro h3{
+    font-family:"Arial Black",Impact,sans-serif;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:1.2px;
+    margin:0 0 6px;
+  }
+  .oro ul{margin:0;padding-left:17px;}
+  .oro li{margin-bottom:4px;}
+
+  .nota{font-size:11px;color:#5B6660;margin-top:5px;}
+
+  @media print{
+    body{background:#fff;padding:0;font-size:11.5px;}
+    .hoja{border:none;padding:0;max-width:none;}
+    h2{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    td.valor,thead th,.casilla.meta,.premio{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+</style>
+</head>
+<body>
+<div class="hoja">
+
+  <header>
+    <h1><small>Obediencia · Respeto · Buenas acciones</small>Los puntos de Noah</h1>
+    <div class="campos">
+      <div>Semana del <u></u></div>
+      <div>Total acumulado <u></u></div>
+    </div>
+  </header>
+
+  <!-- ============ DIARIAS ============ -->
+  <section>
+    <h2>Gano puntos todos los días <span>máximo 16 por día</span></h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Regla</th>
+          <th class="pts">Pts</th>
+          <th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="regla"><i>⚡</i>Obedezco a la primera</td><td class="valor">+3</td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>🤝</i>Juego sin brusquedad</td><td class="valor">+3</td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>💬</i>Digo la verdad</td><td class="valor">+2</td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>✋</i>Espero mi turno</td><td class="valor">+2</td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>🛏️</i>Hago mi cama</td><td class="valor">+2</td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>🧹</i>Ordeno y ayudo en la casa</td><td class="valor">+2</td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>🌙</i>Me acuesto a la hora</td><td class="valor">+2</td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ COLEGIO ============ -->
+  <section>
+    <h2>Colegio <span>se anota el viernes</span></h2>
+    <table>
+      <thead>
+        <tr><th>Regla</th><th class="pts">Pts</th><th style="width:120px">Anotar aquí</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="regla"><i>🏫</i>Buen comportamiento en clases</td><td class="valor">+10</td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>⚽</i>Recreo sin peleas: fútbol y taca-taca</td><td class="valor">+10</td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>🎯</i>Buena nota o buen reporte</td><td class="valor">+5</td><td class="dia"></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ EXTRAS ============ -->
+  <section>
+    <h2>Puntos extra <span>cada vez que pasa</span></h2>
+    <table>
+      <thead>
+        <tr><th>Regla</th><th class="pts">Pts</th><th style="width:180px">Anotar aquí</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="regla"><i>⭐</i>Ayudo sin que me lo pidan</td><td class="valor">+3</td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>🙏</i>Pido perdón y reparo lo que hice</td><td class="valor">+3</td><td class="dia"></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ NEGATIVOS ============ -->
+  <section class="rojo-tabla">
+    <h2 class="rojo">Pierdo puntos <span>máximo −10 por día</span></h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Regla</th>
+          <th class="pts">Pts</th>
+          <th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="regla"><i>🚫</i>Desobedezco al segundo aviso</td><td class="valor">−3</td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>🤥</i>Digo una mentira</td><td class="valor">−5</td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>💥</i>Juego brusco: empujo o tironeo</td><td class="valor">−3</td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>👊</i>Pego, pateo o muerdo</td><td class="valor">−5</td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>😤</i>Peleo en el recreo o en el taca-taca</td><td class="valor">−5</td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>😠</i>Me enojo y grito cuando pierdo</td><td class="valor">−3</td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td></tr>
+        <tr><td class="regla"><i>🗣️</i>Interrumpo o no espero mi turno</td><td class="valor">−2</td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td><td class="dia"></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ RECORRIDO ============ -->
+  <section class="cancha">
+    <h2>Camino a los 1000 puntos <span>cada casilla = 25 puntos</span></h2>
+    <div class="pista">
+      <div class="casilla">25</div><div class="casilla">50</div><div class="casilla">75</div><div class="casilla">100</div>
+      <div class="casilla">125</div><div class="casilla">150</div><div class="casilla">175</div><div class="casilla">200</div>
+      <div class="casilla">225</div><div class="casilla meta">250</div>
+      <div class="casilla">275</div><div class="casilla">300</div><div class="casilla">325</div><div class="casilla">350</div>
+      <div class="casilla">375</div><div class="casilla">400</div><div class="casilla">425</div><div class="casilla">450</div>
+      <div class="casilla">475</div><div class="casilla meta">500</div>
+      <div class="casilla">525</div><div class="casilla">550</div><div class="casilla">575</div><div class="casilla">600</div>
+      <div class="casilla">625</div><div class="casilla">650</div><div class="casilla">675</div><div class="casilla">700</div>
+      <div class="casilla">725</div><div class="casilla meta">750</div>
+      <div class="casilla">775</div><div class="casilla">800</div><div class="casilla">825</div><div class="casilla">850</div>
+      <div class="casilla">875</div><div class="casilla">900</div><div class="casilla">925</div><div class="casilla">950</div>
+      <div class="casilla">975</div><div class="casilla meta">1000</div>
+    </div>
+
+    <div class="premios">
+      <div class="premio"><b>250</b><span>Guantes de arquero</span></div>
+      <div class="premio"><b>500</b><span>Salida al cine</span></div>
+      <div class="premio"><b>750</b><span>Parque de juegos</span></div>
+      <div class="premio"><b>1000</b><span>PlayStation · cumpleaños</span></div>
+    </div>
+    <p class="nota">Pinta una casilla cada vez que sumes 25 puntos. Las casillas amarillas son premio.</p>
+  </section>
+
+  <!-- ============ REGLAS DE ORO ============ -->
+  <section class="oro">
+    <h3>Las 4 reglas de oro</h3>
+    <ul>
+      <li>Los puntos se anotan <b>cada noche</b>, entre los dos. Nunca en medio de un enojo.</li>
+      <li>En un día no se puede perder más de <b>10 puntos</b>.</li>
+      <li>Los premios ya ganados <b>no se devuelven</b> nunca.</li>
+      <li>Pedir perdón y reparar <b>suma</b>. Equivocarse no es el problema; no arreglarlo, sí.</li>
+    </ul>
+  </section>
+
+</div>
+</body>
+</html>
