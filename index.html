@@ -140,38 +140,43 @@ const SEGUNDOS_REFRESCO = 5;
 
 const NOMBRE = 'Noah';
 const REGLAS = [
-  {g:'Todos los días', tope:'máx. 38 al día', neg:false, items:[
+  {g:'Todos los días', tope:'máx. 55 al día', neg:false, items:[
     {id:'obed', ico:'⚡', t:'Obedezco a la primera', p:15, max:1},
     {id:'brus', ico:'🤝', t:'Juego sin brusquedad', p:10, max:1},
-    {id:'verd', ico:'💬', t:'Digo la verdad', p:5, max:1},
-    {id:'turn', ico:'✋', t:'Espero mi turno', p:2, max:1},
-    {id:'cama', ico:'🛏️', t:'Hago mi cama', p:2, max:1},
-    {id:'orden',ico:'🧹', t:'Ordeno y ayudo en la casa', p:2, max:1},
-    {id:'dorm', ico:'🌙', t:'Me acuesto a la hora', p:2, max:1}
+    {id:'verd', ico:'💬', t:'Digo la verdad', p:10, max:1},
+    {id:'turn', ico:'🐈', t:'Juego con cariño con el Pantera y los animales', p:5, max:1},
+    {id:'cama', ico:'🛏️', t:'Hago mi cama', p:5, max:1},
+    {id:'orden',ico:'🧹', t:'Ordeno y ayudo en la casa', p:5, max:1},
+    {id:'dorm', ico:'🌙', t:'Me acuesto a la hora', p:5, max:1}
   ]},
   {g:'Colegio', tope:'todos los días de clase', neg:false, items:[
     {id:'clase', ico:'🙋', t:'Respeto mi turno en clase', p:10, max:1},
-    {id:'instr', ico:'📋', t:'Obedezco las instrucciones', p:5, max:1},
+    {id:'instr', ico:'📋', t:'Obedezco las instrucciones', p:10, max:1},
     {id:'recreo',ico:'⚽', t:'Recreo sin pelea', s:'fútbol y taca-taca', p:10, max:1},
-    {id:'nota',  ico:'🎯', t:'Buena nota', p:8, max:2},
+    {id:'nota',  ico:'🎯', t:'Buena nota', p:10, max:2},
+    {id:'zona',  ico:'🛡️', t:'Respeto la zona íntima de mis compañeros', p:15, max:1},
     {id:'anot',  ico:'🌟', t:'Anotación positiva', p:15, max:1}
   ]},
   {g:'Puntos extra', tope:'cada vez que pasa', neg:false, items:[
     {id:'ayuda', ico:'⭐', t:'Ayudo sin que me lo pidan', p:5, max:3},
     {id:'perdon',ico:'🙏', t:'Pido perdón y reparo', p:5, max:3}
   ]},
-  {g:'Pierdo puntos', tope:'máx. −10 al día', neg:true, items:[
-    {id:'desob',ico:'🚫', t:'Desobedezco al segundo aviso', p:-3, max:5},
-    {id:'ment', ico:'🤥', t:'Digo una mentira', p:-5, max:5},
-    {id:'empu', ico:'💥', t:'Juego brusco: empujo o tironeo', p:-3, max:5},
-    {id:'pego', ico:'👊', t:'Pego, pateo o muerdo', p:-5, max:5},
-    {id:'pelea',ico:'😤', t:'Peleo en el recreo o en el taca-taca', p:-5, max:5},
-    {id:'grito',ico:'😠', t:'Me enojo y grito cuando pierdo', p:-3, max:5},
-    {id:'inter',ico:'🗣️', t:'Interrumpo o no espero mi turno', p:-2, max:5}
+  {g:'Pierdo puntos', tope:'', neg:true, items:[
+    {id:'desob',ico:'🚫', t:'Desobedezco al segundo aviso', p:-10, max:5},
+    {id:'ment', ico:'🤥', t:'Digo una mentira', p:-15, max:5},
+    {id:'empu', ico:'💥', t:'Juego brusco: empujo o tironeo', p:-15, max:5},
+    {id:'pego', ico:'👊', t:'Pego, pateo o muerdo', p:-15, max:5},
+    {id:'pelea',ico:'😤', t:'Peleo en el recreo o en el taca-taca', p:-10, max:5},
+    {id:'grito',ico:'😠', t:'Me enojo y grito cuando pierdo', p:-10, max:5},
+    {id:'inter',ico:'🗣️', t:'No respeto mi turno', p:-5, max:5},
+    {id:'zonaneg',ico:'⛔', t:'No respeto la zona íntima de mis compañeros', p:-25, max:5},
+    {id:'gatoneg',ico:'🙀', t:'Juego brusco o le pego al Pantera', p:-5, max:5},
+    {id:'papas', ico:'💢', t:'Pego a mis papás', p:-25, max:5}
   ]}
 ];
-const TOPE_NEG = -10, META = 1100, CLAVE = 'tabla-puntos:datos';
+const TOPE_NEG = -Infinity, META = 1100, CLAVE = 'tabla-puntos:datos';
 const DIBUJOS = {
+  regalo:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="10" width="18" height="11" rx="1.5" fill="currentColor"/><rect x="2" y="6.5" width="20" height="4" rx="1" fill="currentColor"/><path d="M12 6.5V21" stroke="#fff" stroke-width="2"/><path d="M12 6.5C9.5 6.5 7.2 5.6 7.2 3.9 7.2 2.6 8.3 2 9.3 2c1.6 0 2.7 2.2 2.7 4.5Zm0 0c2.5 0 4.8-.9 4.8-2.6C16.8 2.6 15.7 2 14.7 2c-1.6 0-2.7 2.2-2.7 4.5Z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="15.5" r="2.1" fill="#fff"/></svg>',
   guante:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 22c-2-2-3.5-4.2-3.5-7.5V7.2a1.1 1.1 0 0 1 2.2 0v3.3h.8V4.1a1.1 1.1 0 0 1 2.2 0v6.4h.8V3.1a1.1 1.1 0 0 1 2.2 0v7.4h.8V4.6a1.1 1.1 0 0 1 2.2 0v6.6c1.4-.5 2.6.2 2.6 1.6 0 2.7-1 5.9-3.2 9.2Z" fill="currentColor"/></svg>',
   cine:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="9" width="20" height="12.5" rx="2" fill="currentColor"/><path d="M2.4 7.6 21.4 3.9l.7 3.4-19 3.7Z" fill="currentColor"/><path d="M6.6 5.3 8 8.6M11.4 4.4l1.4 3.3M16.2 3.5l1.4 3.3" stroke="#fff" stroke-width="1.1"/><path d="M10 12.6v5.6l4.6-2.8Z" fill="#fff"/></svg>',
   parque:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V8M4 8h4M4 12h4M4 16h4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" fill="none"/><path d="M8 21c6.5 0 10-4.6 11.8-14.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/><circle cx="20" cy="4" r="2.1" fill="currentColor"/></svg>',
@@ -181,7 +186,7 @@ const HITOS = [
   {p:275,  t:'Guantes de arquero', d:'guante'},
   {p:550,  t:'Cine',               d:'cine'},
   {p:825,  t:'Parque de juegos',   d:'parque'},
-  {p:1100, t:'PlayStation',        d:'consola'}
+  {p:1100, t:'Premio súper genial', d:'regalo'}
 ];
 const DIAS  = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 const DIAS3 = ['dom','lun','mar','mié','jue','vie','sáb'];
