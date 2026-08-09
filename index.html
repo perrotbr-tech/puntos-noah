@@ -140,23 +140,25 @@ const SEGUNDOS_REFRESCO = 5;
 
 const NOMBRE = 'Noah';
 const REGLAS = [
-  {g:'Todos los días', tope:'máx. 16 al día', neg:false, items:[
-    {id:'obed', ico:'⚡', t:'Obedezco a la primera', p:3, max:1},
-    {id:'brus', ico:'🤝', t:'Juego sin brusquedad', p:3, max:1},
-    {id:'verd', ico:'💬', t:'Digo la verdad', p:2, max:1},
+  {g:'Todos los días', tope:'máx. 38 al día', neg:false, items:[
+    {id:'obed', ico:'⚡', t:'Obedezco a la primera', p:15, max:1},
+    {id:'brus', ico:'🤝', t:'Juego sin brusquedad', p:10, max:1},
+    {id:'verd', ico:'💬', t:'Digo la verdad', p:5, max:1},
     {id:'turn', ico:'✋', t:'Espero mi turno', p:2, max:1},
     {id:'cama', ico:'🛏️', t:'Hago mi cama', p:2, max:1},
     {id:'orden',ico:'🧹', t:'Ordeno y ayudo en la casa', p:2, max:1},
     {id:'dorm', ico:'🌙', t:'Me acuesto a la hora', p:2, max:1}
   ]},
-  {g:'Colegio', tope:'se anota el viernes', neg:false, items:[
-    {id:'clase', ico:'🏫', t:'Buen comportamiento en clases', p:10, max:1},
-    {id:'recreo',ico:'⚽', t:'Recreo sin peleas', s:'fútbol y taca-taca', p:10, max:1},
-    {id:'nota',  ico:'🎯', t:'Buena nota o buen reporte', p:5, max:5}
+  {g:'Colegio', tope:'todos los días de clase', neg:false, items:[
+    {id:'clase', ico:'🙋', t:'Respeto mi turno en clase', p:10, max:1},
+    {id:'instr', ico:'📋', t:'Obedezco las instrucciones', p:5, max:1},
+    {id:'recreo',ico:'⚽', t:'Recreo sin pelea', s:'fútbol y taca-taca', p:10, max:1},
+    {id:'nota',  ico:'🎯', t:'Buena nota', p:8, max:2},
+    {id:'anot',  ico:'🌟', t:'Anotación positiva', p:15, max:1}
   ]},
   {g:'Puntos extra', tope:'cada vez que pasa', neg:false, items:[
-    {id:'ayuda', ico:'⭐', t:'Ayudo sin que me lo pidan', p:3, max:5},
-    {id:'perdon',ico:'🙏', t:'Pido perdón y reparo', p:3, max:3}
+    {id:'ayuda', ico:'⭐', t:'Ayudo sin que me lo pidan', p:5, max:3},
+    {id:'perdon',ico:'🙏', t:'Pido perdón y reparo', p:5, max:3}
   ]},
   {g:'Pierdo puntos', tope:'máx. −10 al día', neg:true, items:[
     {id:'desob',ico:'🚫', t:'Desobedezco al segundo aviso', p:-3, max:5},
